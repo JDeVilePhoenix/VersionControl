@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Text;
 
 // write description of the class
 // make static???
@@ -12,12 +11,11 @@ using System.Text;
 
 namespace VersionControl
 {
-    class IO
+    public class IO
     {
         private string file;
         private string path;
         private string filePath;
-        private string extractedValue;
 
         public IO()
         {
@@ -43,6 +41,7 @@ namespace VersionControl
         public string extractStringFromFile()
         {
             /* open the file read the first line and extract the contents */
+            string extractedValue = "";
             try
             {
                 StreamReader sr = File.OpenText(filePath);
@@ -70,7 +69,7 @@ namespace VersionControl
             }
 
             // return an empty string if an exception was thrown
-            return "";
+            return extractedValue;
         }
 
         public void writeStringToFile(string stringValue)
@@ -87,6 +86,11 @@ namespace VersionControl
         public string getFile()
         {
             return file;
+        }
+
+        public string getFilePath()
+        {
+            return filePath;
         }
 
     }

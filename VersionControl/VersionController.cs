@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace VersionControl
 {
-    class VersionController
+    public class VersionController
     {
         private string currentVersion;
         private string newVersion;
-        private string release; // call this release?
+        private string release;
         private int major;
         private int majorDigits = 0;
         private int minor;
@@ -42,33 +42,25 @@ namespace VersionControl
                     Console.WriteLine(currentVersion[i]);
                 }
             }
-
-            numOfDigits();
-
-            int offset = 1;
-            // extract left part version number
-            release = currentVersion.Substring(0, splitPoints[1] + offset);
-            // extract the major number
-            major = int.Parse(currentVersion.Substring(splitPoints[1] + offset, majorDigits));  // to get the second argument you need to find the amount of characters between version numbers
-            // extract the minor number
-            minor = int.Parse(currentVersion.Substring(splitPoints[2] + offset, minorDigits));
-
-        }
-
-        // used to find the number of digits for major and minor numbers
-        private void numOfDigits()
-        {
-            int offset = 1;
-            for (int i = splitPoints[1]; i < splitPoints[2]-offset; i++)
+            Console.WriteLine("splitPoints capacity: {0}", splitPoints.Count);
+            if (splitPoints.Count == 3)
             {
-                majorDigits++;
-            }
+                numOfDigits();
 
-            for (int i = splitPoints[2]; i < currentVersion.Length-offset; i++)
+                int offset = 1;
+                // extract left part version number
+                release = currentVersion.Substring(0, splitPoints[1] + offset);
+                // extract the major number
+                major = int.Parse(currentVersion.Substring(splitPoints[1] + offset, majorDigits));  // to get the second argument you need to find the amount of characters between version numbers
+                                                                                                    // extract the minor number
+                minor = int.Parse(currentVersion.Substring(splitPoints[2] + offset, minorDigits));
+            }
+            else
             {
-                minorDigits++;
+                release = "";
+                major = 0;
+                minor = 0;
             }
-
         }
 
         public void rebuildVersionNumbers()
@@ -90,6 +82,22 @@ namespace VersionControl
             {
                 Console.WriteLine("Invalid version type, input Feature or Bugfix");
             }
+        }
+
+        // used to find the number of digits for major and minor numbers
+        private void numOfDigits()
+        {
+            int offset = 1;
+            for (int i = splitPoints[1]; i < splitPoints[2] - offset; i++)
+            {
+                majorDigits++;
+            }
+
+            for (int i = splitPoints[2]; i < currentVersion.Length - offset; i++)
+            {
+                minorDigits++;
+            }
+
         }
 
         private void incrementMajor()
