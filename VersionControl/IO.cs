@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
-// write description of the class
-// make static???
-// add error checking
+/* The purpose of this class is to extract and write strings from a file */
 
 namespace VersionControl
 {

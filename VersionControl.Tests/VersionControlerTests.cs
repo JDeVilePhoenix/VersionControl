@@ -1,16 +1,11 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VersionControl.Tests
 {
     [TestFixture]
     public class VersionControlerTests
     {
-        /* [UnitOfWork_StateUnderTest_ExpectedBehavior] */
+        /* [unitOfWork_stateUnderTest_expectedBehavior] */
 
         // "0.01.01.01" test failed the trailing zero is removed from major/minor
         [Test]

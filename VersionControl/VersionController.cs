@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-// write description of the class
-// add error checking
+/* The purpose of this class is to extract, increment and rebuild the version data */
 
 namespace VersionControl
 {
@@ -19,21 +15,75 @@ namespace VersionControl
         private int minor;
         private int minorDigits = 0;
         private List<int> splitPoints = new List<int>();
+        private IO io;
 
         public VersionController()
         {
             currentVersion = "No Version";
         }
 
-       
+        // constructor used by unit tests
         public VersionController(string currentVersion)
         {
             this.currentVersion = currentVersion.Trim();
         }
 
+        public void init(string fileName)
+        {
+            io = new IO(fileName);
+            currentVersion = io.extractStringFromFile();
+            currentVersion.Trim();
+        }
+
+        public void init(string fileName, string filePath)
+        {
+            io = new IO(fileName, filePath);
+            currentVersion = io.extractStringFromFile();
+            currentVersion.Trim();
+        }
+
+        public void run(string updateType)
+        {
+            if (updateType.ToLower() != "feature" && updateType.ToLower() != "bugfix")
+            {
+                Console.WriteLine("Invalid update type, please enter a type of feature or bugfix");
+                Console.ReadLine();
+            }
+            else
+            {
+                // extract the version string
+                currentVersion = io.extractStringFromFile();
+                
+      
+                // if an exception was thrown while trying to extract the version number skip to the end
+                if (currentVersion != "")
+                {
+                    Console.WriteLine("\nCurrent version of {0} is: {1}", io.getFile(), currentVersion);
+                    Console.WriteLine("Update type: {0}", updateType);
+
+                    // split the version numbers from the string
+                    extractVersionNumbers();
+                    // increment the version numbers based on the second argument
+                    incrementVersion(updateType.ToLower());
+                    // rebuild the version numbers string
+                    rebuildVersionNumbers();
+                    // write the new string to the file overwriting the previous value
+                    io.writeStringToFile(newVersion);
+
+                    Console.ReadLine();
+                }
+                else
+                {
+                    Console.WriteLine("The application was unable to extract the version number.");
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        // splits the version string into three parts, release, major and minor
         public void extractVersionNumbers()
         {
-            
+            // store the index of each '.' in the string
             for (int i = 0; i < currentVersion.Length; i++)
             {
                 if (currentVersion[i] == '.')
@@ -42,13 +92,12 @@ namespace VersionControl
                     Console.WriteLine(currentVersion[i]);
                 }
             }
-            Console.WriteLine("splitPoints capacity: {0}", splitPoints.Count);
             if (splitPoints.Count == 3)
             {
                 numOfDigits();
 
                 int offset = 1;
-                // extract left part version number
+                // extract release version number
                 release = currentVersion.Substring(0, splitPoints[1] + offset);
                 // extract the major number
                 major = int.Parse(currentVersion.Substring(splitPoints[1] + offset, majorDigits));  // to get the second argument you need to find the amount of characters between version numbers
@@ -68,6 +117,7 @@ namespace VersionControl
             newVersion = release + major + "." + minor;
         }
 
+        // increments the version numbers based on the type of version change passed in
         public void incrementVersion(string version)
         {
             if (version == "feature")

@@ -1,18 +1,12 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VersionControl;
 
 namespace VersionControl.Tests
 {
     [TestFixture]
     class IOTests
     {
-        /* [UnitOfWork_StateUnderTest_ExpectedBehavior] */
+        /* [unitOfWork_stateUnderTest_expectedBehavior] */
 
         [Test]
         public void extractStringFromFile_whenNoFilePath_returnsEmptyString()
